@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+    <title>Controller</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 2em 2em 1fr;
+            gap: 0 0;
+            grid-template-areas:
+                "top top"
+                ". ."
+                ". .";
+            }
+        .top { grid-area: top; }
+    </style>
+</head>
+<body>
+    <h1>Controller</h1>
+
+    <div class="container">
+        <div class="top">
+            Overlay: <a href="http://localhost:8702/overlay" target="_blank">localhost:8702/overlay</a>
+        </div>
+        <div>
+            <label for="mission">Mission</label>
+            <input type="text" id="mission"/>
+        </div>
+        <div>
+            <label for="tp">Turning Point</label>
+            <input type="text" id="tp"/>
+        </div>
+        <div>
+            <h2>Player 1</h2>
+            <div>
+                <label for="p1name">Name</label>
+                <input type="text" id="p1name"/>
+            </div>
+            <div>
+                <label for="p1team">Team</label>
+                <input type="text" id="p1team"/>
+            </div>
+            <div>
+                <label for="p1vp">Victory Points</label>
+                <input type="text" id="p1vp"/>
+            </div>
+            <div>
+                <label for="p1cp">Command Points</label>
+                <input type="text" id="p1cp"/>
+            </div>
+        </div>
+        <div>
+            <h2>Player 2</h2>
+            <div>
+                <label for="p2name">Name</label>
+                <input type="text" id="p2name"/>
+            </div>
+            <div>
+                <label for="p2team">Team</label>
+                <input type="text" id="p2team"/>
+            </div>
+            <div>
+                <label for="p2vp">Victory Points</label>
+                <input type="text" id="p2vp"/>
+            </div>
+            <div>
+                <label for="p2cp">Command Points</label>
+                <input type="text" id="p2cp"/>
+            </div>
+        </div>
+    </div> <!-- /container -->
+    <script>
+        // to make my life easier
+        const $ = document.querySelector.bind(document)
+
+        // websockets
+        const ws = new WebSocket('ws://localhost:8702')
+        ws.addEventListener('open', () => {
+            // ws.send('{"test": true}');
+            console.log('connected')
+        })
+
+        function update(jsObj) {
+            ws.send(JSON.stringify(jsObj))
+        }
+
+        $('#mission').onkeyup = (ev) => {
+            update({mission: ev.target.value})
+        }
+
+        $('#tp').onkeyup = (ev) => {
+            update({tp: ev.target.value})
+        }
+
+        $('#p1name').onkeyup = (ev) => {
+            update({p1name: ev.target.value})
+        }
+
+        $('#p1team').onkeyup = (ev) => {
+            update({p1team: ev.target.value})
+        }
+
+        $('#p1vp').onkeyup = (ev) => {
+            update({p1vp: ev.target.value})
+        }
+
+        $('#p1cp').onkeyup = (ev) => {
+            update({p1cp: ev.target.value})
+        }
+
+        $('#p2name').onkeyup = (ev) => {
+            update({p2name: ev.target.value})
+        }
+
+        $('#p2team').onkeyup = (ev) => {
+            update({p2team: ev.target.value})
+        }
+
+        $('#p2vp').onkeyup = (ev) => {
+            update({p2vp: ev.target.value})
+        }
+
+        $('#p2cp').onkeyup = (ev) => {
+            update({p2cp: ev.target.value})
+        }
+
+    </script>
+</body>
+</html>

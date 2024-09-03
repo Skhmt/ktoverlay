@@ -1,0 +1,67 @@
+<html lang="en">
+<body>
+Overlay example
+
+<div id="mission"></div>
+<div id="tp"></div>
+<div id="p1name"></div>
+<div id="p1team"></div>
+<div id="p1vp"></div>
+<div id="p1cp"></div>
+<div id="p2name"></div>
+<div id="p2team"></div>
+<div id="p2vp"></div>
+<div id="p2cp"></div>
+
+<script>
+    // to make my life easier
+    const $ = document.querySelector.bind(document)
+
+    let state = {
+        p1name: '',
+        p1team: '',
+        p1vp: '',
+        p1cp: '',
+        p1taco: '',
+        p2name: '',
+        p2team: '',
+        p2vp: '',
+        p2cp: '',
+        p2taco: '',
+        mission: '',
+        tp: '',
+    }
+
+    function update() {
+        $('#mission').innerHTML = state.mission
+        $('#tp').innerHTML = state.tp
+
+        $('#p1name').innerHTML = state.p1name
+        $('#p1team').innerHTML = state.p1team
+        $('#p1vp').innerHTML = state.p1vp
+        $('#p1cp').innerHTML = state.p1cp
+
+        $('#p2name').innerHTML = state.p2name
+        $('#p2team').innerHTML = state.p2team
+        $('#p2vp').innerHTML = state.p2vp
+        $('#p2cp').innerHTML = state.p2cp
+    }
+
+    // websockets
+    const ws = new WebSocket('ws://localhost:8702')
+    ws.addEventListener('open', () => {
+        console.log('connected')
+    })
+    ws.addEventListener('message', (ev) => {
+        console.log(ev.data)
+        try {
+            const data = JSON.parse(ev.data)
+            state = {...state, ...data}
+            update()
+        } catch (e) {
+            console.log(e)
+        }
+    })
+</script>
+</body>
+</html>
