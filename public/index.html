@@ -2,17 +2,26 @@
 <head>
     <title>Controller</title>
     <style>
-        .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 2em 2em 1fr;
-            gap: 0 0;
-            grid-template-areas:
-                "top top"
-                ". ."
-                ". .";
-            }
-        .top { grid-area: top; }
+        /*.container {*/
+        /*    display: grid;*/
+        /*    grid-template-columns: 1fr 1fr;*/
+        /*    grid-template-rows: 2em 2em 1fr;*/
+        /*    gap: 0 0;*/
+        /*    grid-template-areas:*/
+        /*        "top top"*/
+        /*        ". ."*/
+        /*        ". .";*/
+        /*    }*/
+        /*.top { grid-area: top; }*/
+        input[type=number]::-webkit-inner-spin-button {
+            opacity: 0
+        }
+        input[type='number'] {
+            width: 30px;
+        }
+        div {
+            margin-bottom: 1em;
+        }
     </style>
 </head>
 <body>
@@ -23,56 +32,63 @@
             Overlay: <a href="http://localhost:8702/overlay" target="_blank">localhost:8702/overlay</a>
         </div>
         <div>
-            <label for="mission">Mission</label>
-            <input type="text" id="mission"/>
+            <label for="mission">Mission:</label>
+            <input type="text" id="mission" onkeyup="update({'mission': this.value})"/>
         </div>
         <div>
-            <label for="tp">Turning Point</label>
-            <input type="text" id="tp"/>
+            <label for="tp">Turning Point:</label>
+            <button onclick="tp.stepDown(); update({'tp': tp.value})">-</button>
+            <input type="number" min="1" value="1" readonly id="tp"/>
+            <button onclick="tp.stepUp(); update({'tp': tp.value})">+</button>
         </div>
         <div>
             <h2>Player 1</h2>
             <div>
-                <label for="p1name">Name</label>
-                <input type="text" id="p1name"/>
+                <label for="p1name">Name:</label>
+                <input type="text" id="p1name" onkeyup="update({'p1name': this.value})"/>
             </div>
             <div>
-                <label for="p1team">Team</label>
-                <input type="text" id="p1team"/>
+                <label for="p1team">Team:</label>
+                <input type="text" id="p1team" onkeyup="update({'p1team': this.value})"/>
             </div>
             <div>
-                <label for="p1vp">Victory Points</label>
-                <input type="text" id="p1vp"/>
+                <label for="p1vp">Victory Points:</label>
+                <button onclick="p1vp.stepDown(); update({'p1vp': p1vp.value})">-</button>
+                <input type="number" min="0" value="0" readonly id="p1vp"/>
+                <button onclick="p1vp.stepUp(); update({'p1vp': p1vp.value})">+</button>
             </div>
             <div>
-                <label for="p1cp">Command Points</label>
-                <input type="text" id="p1cp"/>
+                <label for="p1cp">Command Points:</label>
+                <button onclick="p1cp.stepDown(); update({'p1cp': p1cp.value})">-</button>
+                <input type="number" min="0" value="3" readonly id="p1cp"/>
+                <button onclick="p1cp.stepUp(); update({'p1cp': p1cp.value})">+</button>
             </div>
         </div>
         <div>
             <h2>Player 2</h2>
             <div>
-                <label for="p2name">Name</label>
-                <input type="text" id="p2name"/>
+                <label for="p2name">Name:</label>
+                <input type="text" id="p2name" onkeyup="update({'p2name': this.value})"/>
             </div>
             <div>
-                <label for="p2team">Team</label>
-                <input type="text" id="p2team"/>
+                <label for="p2team">Team:</label>
+                <input type="text" id="p2team" onkeyup="update({'p2team': this.value})"/>
             </div>
             <div>
-                <label for="p2vp">Victory Points</label>
-                <input type="text" id="p2vp"/>
+                <label for="p2vp">Victory Points:</label>
+                <button onclick="p2vp.stepDown(); update({'p2vp': p2vp.value})">-</button>
+                <input type="number" min="0" value="0" readonly id="p2vp"/>
+                <button onclick="p2vp.stepUp(); update({'p2vp': p2vp.value})">+</button>
             </div>
             <div>
-                <label for="p2cp">Command Points</label>
-                <input type="text" id="p2cp"/>
+                <label for="p2cp">Command Points:</label>
+                <button onclick="p2cp.stepDown(); update({'p2cp': p2cp.value})">-</button>
+                <input type="number" min="0" value="3" readonly id="p2cp"/>
+                <button onclick="p2cp.stepUp(); update({'p2cp': p2cp.value})">+</button>
             </div>
         </div>
     </div> <!-- /container -->
     <script>
-        // to make my life easier
-        const $ = document.querySelector.bind(document)
-
         // websockets
         const ws = new WebSocket('ws://localhost:8702')
         ws.addEventListener('open', () => {
@@ -81,49 +97,10 @@
         })
 
         function update(jsObj) {
-            ws.send(JSON.stringify(jsObj))
+            const objStr = JSON.stringify(jsObj)
+            // console.log(objStr)
+            ws.send(objStr)
         }
-
-        $('#mission').onkeyup = (ev) => {
-            update({mission: ev.target.value})
-        }
-
-        $('#tp').onkeyup = (ev) => {
-            update({tp: ev.target.value})
-        }
-
-        $('#p1name').onkeyup = (ev) => {
-            update({p1name: ev.target.value})
-        }
-
-        $('#p1team').onkeyup = (ev) => {
-            update({p1team: ev.target.value})
-        }
-
-        $('#p1vp').onkeyup = (ev) => {
-            update({p1vp: ev.target.value})
-        }
-
-        $('#p1cp').onkeyup = (ev) => {
-            update({p1cp: ev.target.value})
-        }
-
-        $('#p2name').onkeyup = (ev) => {
-            update({p2name: ev.target.value})
-        }
-
-        $('#p2team').onkeyup = (ev) => {
-            update({p2team: ev.target.value})
-        }
-
-        $('#p2vp').onkeyup = (ev) => {
-            update({p2vp: ev.target.value})
-        }
-
-        $('#p2cp').onkeyup = (ev) => {
-            update({p2cp: ev.target.value})
-        }
-
     </script>
 </body>
 </html>
